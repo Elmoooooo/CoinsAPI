@@ -1,0 +1,7 @@
+name: CoinsAPI
+author: Elmo
+main: de.elmo.coinsapi.CoinsAPI
+version: 1.0
+
+commands:
+  coins:
