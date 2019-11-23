@@ -71,7 +71,7 @@ public class CommandCoins
                 player.sendMessage("§bCoins §8- §7Du hast §e" + CoinsAPI.getInstance().getCoins(player) + " §7Coins!");
             }
         } else {
-            System.out.println("Was fällt dir ein die Console zu nutzen!");
+            System.out.println("Du musst ein Spieler sein!");
         }
         return true;
     }

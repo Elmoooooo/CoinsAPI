@@ -10,7 +10,6 @@ import java.sql.ResultSet;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 
@@ -47,7 +46,7 @@ public class CoinsAPI
     private void initCache() {
         this.cache = CacheBuilder.newBuilder().expireAfterAccess(30L, TimeUnit.MINUTES).maximumSize(1000L).build(new CacheLoader<UUID, Integer>() {
             public Integer load(UUID uuid) {
-                Future<Integer> future = CoinsAPI.this.executorService.submit(() -> {
+                CoinsAPI.this.executorService.submit(() -> {
                     try {
                         ResultSet resultSet = MySQL.getInstance().query("SELECT * FROM coinsTable WHERE uuid='" + uuid.toString() + "'");
 
@@ -55,7 +54,6 @@ public class CoinsAPI
                             return resultSet.getInt("coins");
                         }
                         MySQL.getInstance().update("INSERT INTO coinsTable (uuid,coins) VALUES ('" + uuid.toString() + "',0)");
-                        System.out.println("INSERT " + uuid);
                         return 0;
 
                     } catch (Exception ex) {
@@ -64,7 +62,7 @@ public class CoinsAPI
                 });
 
                 try {
-                    return future.get();
+                    return cache.get(uuid);
                 } catch (Exception ex) {
                     ex.printStackTrace();
 
